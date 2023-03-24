@@ -1,10 +1,19 @@
 ////////// IMPORT //////////
-
 //Une application Express est fondamentalement une série de fonctions middleware.
+
 const express = require('express');
+
+const mongoose = require('mongoose');
 
 // crée app comme une application express en utilisant la méthode express()
 const app = express();
+
+//permet la connexion à la base de donnée MongoDB
+mongoose.connect('mongodb+srv://usertest:usertest@clusterppr.c8zypay.mongodb.net/?retryWrites=true&w=majority',
+{ useNewUrlParser:true,
+    useUnifiedTopology:true})
+    .then(() => console.log('Connexion à MongoDB réussi !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 ////////// MIDDLEWARE //////////
 // au minimum le dernier objet de la chaine doit utiliser l'objet res pour renvoyer la réponse au client sinon la requete va expirer
