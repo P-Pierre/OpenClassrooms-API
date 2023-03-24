@@ -3,8 +3,16 @@
 //Une application Express est fondamentalement une série de fonctions middleware.
 const express = require('express');
 
+const mongoose = require('mongoose');
+
 // crée app comme une application express en utilisant la méthode express()
 const app = express();
+
+mongoose.connect('mongodb+srv://pierreprie:wJvpfwKZ7zN1zSGX@clusterppr.c8zypay.mongodb.net/?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 ////////// MIDDLEWARE //////////
 // au minimum le dernier objet de la chaine doit utiliser l'objet res pour renvoyer la réponse au client sinon la requete va expirer
