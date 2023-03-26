@@ -1,5 +1,7 @@
 const http = require('http');
 const app = require('./app');
+//const appTest = require('./appTest');
+
 /*
  * const nomFontion = (param1, param2) ou param => {
  *    if(){
@@ -34,6 +36,7 @@ const port = normalizePort(process.env.PORT||3000);
 * Définie name avec la valeur
 */ 
 app.set('port',port);
+//appTest.set('port',port);
 
 // fonction de gestion des erreurs
 const errorHandler = error => {
@@ -59,6 +62,7 @@ const errorHandler = error => {
 * l'objet/fonction app est défini pour répondre aux requètes recus par le serveur
 */
 const server = http.createServer(app);
+//const server = http.createServer(appTest);
 
 // associe le fonction errorHandler à l'evenement 'error'
 server.on('error',errorHandler);
