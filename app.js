@@ -2,34 +2,27 @@
 //Une application Express est fondamentalement une série de fonctions middleware.
 
 const express = require('express');
-
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+// importation de notre router 
+const stuffRoutes = require('./routes/stuff');
+const userRoutes = require('./routes/user');
 
 // crée app comme une application express en utilisant la méthode express()
 const app = express();
 
-//permet la connexion à la base de donnée MongoDB
-mongoose.connect('mongodb+srv://usertest:usertest@clusterppr.c8zypay.mongodb.net/?retryWrites=true&w=majority',
-{ useNewUrlParser:true,
-    useUnifiedTopology:true})
-    .then(() => console.log('Connexion à MongoDB réussi !'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));
+mongoose.connect('mongodb+srv://pierreprie:wJvpfwKZ7zN1zSGX@clusterppr.c8zypay.mongodb.net/?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 ////////// MIDDLEWARE //////////
 // au minimum le dernier objet de la chaine doit utiliser l'objet res pour renvoyer la réponse au client sinon la requete va expirer
 
 //intercepte les requetes qui contiennent du json et mets a disposition ce contenue du corps de la requete dans l'objet request via 'req.body'
 app.use(express.json());
-
-// utilise les objets 'req' : request et 'res' : response
-// la fonction next permet de renvoyer a une prochaine fonction midlewear l'exécution du server
-// app.use intercepte tout type de requete
-app.use((req,res, next) => {
-    //Affiche un message dans la console 
-    console.log('Requête recues !');
-    //Appel la fonction next pour transmettre la requête à la prochaine fonction midlewear
-    next();
-});
 
 //Pas d'addresse spécifié, donc appliqué a toute les routes
 //La définition se fait sur l'objet réponse
@@ -43,45 +36,13 @@ app.use((req, res, next) => {
     next();
   });
 
-// app.post intercepte uniquement les requetes POST
-app.post('/api/stuff', (req, res, next) => {
-    console.log(req.body);
-    //Modifie le status du message de réponse et l'objet json du message retourné
-    res.status(201).json({message: 'Objet crée l'});
-    next();
-});
+// Permet de récupérer le contenu json du body d'une requète
+app.use(bodyParser.json());
 
-
-//on spécifie en plusle chemin pour lequel la fonction Middleware est utilisé
-// app.get intercepte uniquement les requetes GET
-app.get('/api/stuff', (req, res, next) => {
-    const stuff = [
-      {
-        _id: 'oeihfzeoi',
-        title: 'Mon premier objet',
-        description: 'Les infos de mon premier objet',
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        price: 4900,
-        userId: 'qsomihvqios',
-      },
-      {
-        _id: 'oeihfzeomoihi',
-        title: 'Mon deuxième objet',
-        description: 'Les infos de mon deuxième objet',
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        price: 2900,
-        userId: 'qsomihvqios',
-      },
-    ];
-
-    res.status(200).json(stuff);
-    next();
-  });
-
-app.use((req,res, next) => {
-    console.log('Reponse envoyé avec succes !');
-    next();
-});
+//Pour toutes les routes 'api/stuff' on utilise notre router stuffRoutes
+app.use('/api/stuff', stuffRoutes);
+//Pour toutes les routes 'api/auth' on utilise notre router userRoutes
+app.use('/api/auth', userRoutes);
 
 ////////// EXPORT //////////
 // permet d'exporter le module app que l'on a défini
