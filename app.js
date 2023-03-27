@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 // importation de notre router 
-const stuffRoutes = require('./routes/stuff')
+const stuffRoutes = require('./routes/stuff');
+const userRoutes = require('./routes/user');
 
 // crée app comme une application express en utilisant la méthode express()
 const app = express();
@@ -40,6 +41,8 @@ app.use(bodyParser.json());
 
 //Pour toutes les routes 'api/stuff' on utilise notre router stuffRoutes
 app.use('/api/stuff', stuffRoutes);
+//Pour toutes les routes 'api/auth' on utilise notre router userRoutes
+app.use('/api/auth', userRoutes);
 
 ////////// EXPORT //////////
 // permet d'exporter le module app que l'on a défini
